@@ -9,11 +9,11 @@
 
 XLS_Exporter::~XLS_Exporter() = default;
 
-XLS_Exporter::XLS_Exporter(QString fileName,
-													 const std::vector<LAS_Curve>& curves,
-													 std::vector<size_t> indecies) :
-	m_fileName(std::move(fileName)), m_curves(curves), m_indecies(std::move(indecies))
-{}
+XLS_Exporter::XLS_Exporter(QString fileName, const LAS2XLS::Curves &curves) :
+    m_fileName(std::move(fileName)), m_curves(curves)
+{
+
+}
 
 void XLS_Exporter::stop()
 {
@@ -30,20 +30,19 @@ void XLS_Exporter::run()
 void XLS_Exporter::saveCurves()
 {
 	QXlsx::Document xlsx;
-	float totalSize = m_indecies.size() * m_curves.begin()->values().size();
+    float totalSize = m_curves.curves_size() * m_curves.curves().Get(0).m_values_size();
 	float currentProg = 1.0f;
 	float adjProgress = 0.0f;
 	int column = 1;
-	for (auto index : m_indecies) {
-		const auto& c = m_curves[index];
+    for (const auto c : m_curves.curves()) {
 		int row = 1;
-		xlsx.write(row, column, c.name());
-		for (const auto& v : c.values())
+        xlsx.write(row, column, QString::fromStdString(c.m_name()));
+        for (const auto& v : c.m_values())
 		{
 			{
 				QMutexLocker lock(&m_stop_signal);
 				if (m_stop) return;
-				xlsx.write(++row, column, v);
+                xlsx.write(++row, column, QString::fromStdString(v));
 				adjProgress = 100.0f * (currentProg++ / totalSize);
 			}
 			emit progressNotifier(int(adjProgress));

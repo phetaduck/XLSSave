@@ -41,7 +41,7 @@ public:
 	/** Subscribe to the given topic */
     virtual void subscribe(const QString &topic);
 	
-    void publish(const QString &topic, const QString &message);
+    void publish(const QString &topic, const std::string &message);
 	
 	/**
 	  * Connects to the given remote host
@@ -56,7 +56,7 @@ public:
 	/** Method called then an error occurred */
     virtual void onError(const QString& msg) { (void)msg; }
 	/** Method called when a new message arrives */
-    virtual void onMessage(QString topic, QString message) { (void)topic; (void)message; }
+    virtual void onMessage(QString topic, std::string message) { (void)topic; (void)message; }
 	
 	/** Loop through messages. This call usually blocks until the connection is closed
 	  *@param tryReconnect if true, the client tries to reconnect if an error occurs */

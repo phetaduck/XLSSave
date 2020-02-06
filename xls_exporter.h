@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "las_curve.h"
+#include "curve.pb.h"
 
 class XLS_Exporter : public QObject, public QRunnable
 {
@@ -17,9 +18,8 @@ public:
 	XLS_Exporter() = default;
 	virtual ~XLS_Exporter() override;
 
-	XLS_Exporter(QString fileName,
-							 const std::vector<LAS_Curve>& curves,
-							 std::vector<size_t> indecies);
+    XLS_Exporter(QString fileName,
+                             const LAS2XLS::Curves& curves);
 
 	void stop();
 	void run() override;
@@ -34,8 +34,7 @@ private:
 
 private:
 	QString m_fileName;
-	const std::vector<LAS_Curve>& m_curves;
-	std::vector<size_t> m_indecies;
+    const LAS2XLS::Curves& m_curves;
 
 	QMutex m_stop_signal;
 	bool m_stop = false;

@@ -21,11 +21,12 @@ QXLSX_HEADERPATH=./QXlsx/header/  # current QXlsx header path is ./header/
 QXLSX_SOURCEPATH=./QXlsx/source/  # current QXlsx source path is ./source/
 include(./QXlsx/QXlsx.pri)
 
-INCLUDEPATH += \
+INCLUDEPATH += ./Headers \
     C:/Dev/Mosquitto/devel \
-    C:/Dev/protobuff/include \
+    C:/Dev/protobuf/include
 
 SOURCES += \
+    curve.pb.cc \
     las_curve.cpp \
     main.cpp \
     mosquitto.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     xlssave.cpp
 
 HEADERS += \
+    curve.pb.h \
     las_curve.h \
     mosquitto.hpp \
     mqtt_impl.h \
@@ -44,7 +46,10 @@ FORMS += \
     xlssave.ui
 
 LIBS += \
-    -LC:/Dev/Mosquitto/devel -lmosquitto
+    -LC:/Dev/Mosquitto/devel -lmosquitto \
+    -LC:/Dev/protobuf/lib -llibprotobuf \
+    -LC:/Dev/protobuf/lib -llibprotobuf-lite \
+    -LC:/Dev/protobuf/lib -llibprotoc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
